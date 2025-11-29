@@ -21,3 +21,25 @@ export interface Product {
   updated_at?: string
 }
 
+// Sales data type for tracking daily sales
+export interface SalesData {
+  id: string
+  product_id: string
+  sale_date: string // ISO date string
+  time_period: string
+  quantity_sold: number
+  created_at: string
+  updated_at?: string
+  // Joined data from products table (when fetching with join)
+  products?: Product
+}
+
+// Time periods for sales tracking
+export type TimePeriod = 'Breakfast' | 'Lunch' | 'Afternoon'
+
+export const TIME_PERIODS: { value: TimePeriod; label: string; hours: string }[] = [
+  { value: 'Breakfast', label: 'Breakfast', hours: '6-11am' },
+  { value: 'Lunch', label: 'Lunch', hours: '11am-3pm' },
+  { value: 'Afternoon', label: 'Afternoon', hours: '3pm-8pm' },
+]
+
