@@ -233,7 +233,8 @@ function Sales() {
     }
   }
 
-  const handleDateChange = (newDate: string) => {
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = e.target.value
     setFormData({ ...formData, sale_date: newDate })
     fetchTodaysSales(newDate)
   }
