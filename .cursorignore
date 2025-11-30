@@ -1,0 +1,5 @@
+# Un-ignore .env file to allow Cursor AI to help with environment variables
+# This does NOT affect .gitignore - the file will still be ignored by Git
+!.env
+
+
