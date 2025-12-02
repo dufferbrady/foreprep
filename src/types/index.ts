@@ -11,6 +11,7 @@ export interface Product {
   id: string
   name: string
   category: string
+  department: string // Deli, Bakery, Cigarettes, Soft Drinks, or Other
   cost_price: number
   sell_price: number
   shelf_life?: number // in hours
@@ -97,6 +98,17 @@ export const WASTE_REASONS: WasteReason[] = [
   'Overproduction',
   'Quality issue',
   'Damaged',
+  'Other',
+]
+
+// Department types
+export type Department = 'Deli' | 'Bakery' | 'Cigarettes' | 'Soft Drinks' | 'Other'
+
+export const DEPARTMENTS: Department[] = [
+  'Deli',
+  'Bakery',
+  'Cigarettes',
+  'Soft Drinks',
   'Other',
 ]
 

@@ -119,6 +119,17 @@ function Products() {
     return colors[category] || 'bg-gray-100 text-gray-800'
   }
 
+  const getDepartmentColor = (department: string) => {
+    const colors: Record<string, string> = {
+      'Deli': 'bg-blue-100 text-blue-800 border-blue-200',
+      'Bakery': 'bg-amber-100 text-amber-800 border-amber-200',
+      'Cigarettes': 'bg-green-100 text-green-800 border-green-200',
+      'Soft Drinks': 'bg-cyan-100 text-cyan-800 border-cyan-200',
+      'Other': 'bg-gray-100 text-gray-800 border-gray-200',
+    }
+    return colors[department] || 'bg-gray-100 text-gray-800 border-gray-200'
+  }
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IE', {
       style: 'currency',
@@ -251,6 +262,9 @@ function Products() {
                     Name
                   </th>
                   <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Department
+                  </th>
+                  <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Category
                   </th>
                   <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
@@ -272,6 +286,11 @@ function Products() {
                   <tr key={product.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getDepartmentColor(product.department)}`}>
+                        {product.department}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getCategoryColor(product.category)}`}>

@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react'
 import { supabase } from '../lib/supabase'
-import { Product } from '../types'
+import { Product, DEPARTMENTS } from '../types'
 
 interface ProductModalProps {
   isOpen: boolean
@@ -13,6 +13,7 @@ interface ProductModalProps {
 interface FormData {
   name: string
   category: string
+  department: string
   cost_price: string
   sell_price: string
   shelf_life: string
@@ -23,6 +24,7 @@ interface FormData {
 interface ValidationErrors {
   name?: string
   category?: string
+  department?: string
   cost_price?: string
   sell_price?: string
   shelf_life?: string
@@ -38,6 +40,7 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
   const [formData, setFormData] = useState<FormData>({
     name: '',
     category: '',
+    department: 'Deli', // Default to Deli
     cost_price: '',
     sell_price: '',
     shelf_life: '',
@@ -54,6 +57,7 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
       setFormData({
         name: product.name,
         category: product.category,
+        department: product.department || 'Deli',
         cost_price: product.cost_price.toString(),
         sell_price: product.sell_price.toString(),
         shelf_life: product.shelf_life?.toString() || '',
@@ -65,6 +69,7 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
       setFormData({
         name: '',
         category: '',
+        department: 'Deli',
         cost_price: '',
         sell_price: '',
         shelf_life: '',
@@ -95,6 +100,13 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
     // Required: Category
     if (!formData.category) {
       newErrors.category = 'Please select a category'
+    }
+
+    // Required: Department
+    if (!formData.department) {
+      newErrors.department = 'Please select a department'
+    } else if (!DEPARTMENTS.includes(formData.department as any)) {
+      newErrors.department = 'Please select a valid department'
     }
 
     // Required: Cost Price
@@ -148,6 +160,7 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
       const productData: Partial<Product> = {
         name: formData.name.trim(),
         category: formData.category,
+        department: formData.department,
         cost_price: parseFloat(formData.cost_price),
         sell_price: parseFloat(formData.sell_price),
         shelf_life: formData.shelf_life ? parseFloat(formData.shelf_life) : undefined,
@@ -179,6 +192,7 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
       setFormData({
         name: '',
         category: '',
+        department: 'Deli',
         cost_price: '',
         sell_price: '',
         shelf_life: '',
@@ -202,6 +216,7 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
       setFormData({
         name: '',
         category: '',
+        department: 'Deli',
         cost_price: '',
         sell_price: '',
         shelf_life: '',
@@ -284,6 +299,28 @@ function ProductModal({ isOpen, onClose, onSuccess, onError, product }: ProductM
                   ))}
                 </select>
                 {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category}</p>}
+              </div>
+
+              {/* Department */}
+              <div>
+                <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-2">
+                  Department <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="department"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors ${
+                    errors.department ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                >
+                  <option value="">Select a department</option>
+                  {DEPARTMENTS.map(dept => (
+                    <option key={dept} value={dept}>{dept}</option>
+                  ))}
+                </select>
+                {errors.department && <p className="mt-1 text-sm text-red-600">{errors.department}</p>}
               </div>
 
               {/* Storage Type */}
