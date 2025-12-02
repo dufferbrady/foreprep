@@ -4,6 +4,7 @@ import Products from './pages/Products'
 import Sales from './pages/Sales'
 import Forecast from './pages/Forecast'
 import Waste from './pages/Waste'
+import Settings from './pages/Settings'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/sales" element={<Sales />} />
           <Route path="/forecast" element={<Forecast />} />
           <Route path="/waste" element={<Waste />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Layout>
     </Router>

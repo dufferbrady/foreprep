@@ -8,6 +8,7 @@ function Header() {
     { name: 'Sales', path: '/sales' },
     { name: 'Forecast', path: '/forecast' },
     { name: 'Waste', path: '/waste' },
+    { name: 'Settings', path: '/settings' },
   ]
 
   const isActive = (path: string) => location.pathname === path

@@ -3,6 +3,8 @@ import { supabase } from '../lib/supabase'
 import { Product } from '../types'
 import ProductModal from '../components/ProductModal'
 import Toast from '../components/Toast'
+import Badge from '../components/Badge'
+import { BadgeColor } from '../types'
 
 interface ToastState {
   show: boolean
@@ -29,7 +31,21 @@ function Products() {
       
       const { data, error } = await supabase
         .from('products')
-        .select('*')
+        .select(`
+          *,
+          categories (
+            id,
+            name,
+            color,
+            active
+          ),
+          departments (
+            id,
+            name,
+            color,
+            active
+          )
+        `)
         .eq('active', true) // Only fetch active products
         .order('created_at', { ascending: false })
 
@@ -98,36 +114,6 @@ function Products() {
 
   const handleModalError = (message: string) => {
     showToast(message, 'error')
-  }
-
-  const getCategoryColor = (category: string) => {
-    const colors: Record<string, string> = {
-      'Breakfast': 'bg-yellow-100 text-yellow-800',
-      'Lunch': 'bg-green-100 text-green-800',
-      'Hot Food': 'bg-red-100 text-red-800',
-      'Sandwiches': 'bg-blue-100 text-blue-800',
-      'Bakery': 'bg-purple-100 text-purple-800',
-      'Other': 'bg-gray-100 text-gray-800',
-      // Legacy categories for backwards compatibility
-      'Pastry': 'bg-purple-100 text-purple-800',
-      'Bread': 'bg-amber-100 text-amber-800',
-      'Cake': 'bg-pink-100 text-pink-800',
-      'Savory': 'bg-orange-100 text-orange-800',
-      'Dessert': 'bg-rose-100 text-rose-800',
-      'Beverage': 'bg-blue-100 text-blue-800',
-    }
-    return colors[category] || 'bg-gray-100 text-gray-800'
-  }
-
-  const getDepartmentColor = (department: string) => {
-    const colors: Record<string, string> = {
-      'Deli': 'bg-blue-100 text-blue-800 border-blue-200',
-      'Bakery': 'bg-amber-100 text-amber-800 border-amber-200',
-      'Cigarettes': 'bg-green-100 text-green-800 border-green-200',
-      'Soft Drinks': 'bg-cyan-100 text-cyan-800 border-cyan-200',
-      'Other': 'bg-gray-100 text-gray-800 border-gray-200',
-    }
-    return colors[department] || 'bg-gray-100 text-gray-800 border-gray-200'
   }
 
   const formatCurrency = (amount: number) => {
@@ -288,14 +274,25 @@ function Products() {
                       <div className="text-sm font-medium text-gray-900">{product.name}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full border ${getDepartmentColor(product.department)}`}>
-                        {product.department}
-                      </span>
+                      {product.departments ? (
+                        <Badge 
+                          label={product.departments.name} 
+                          color={product.departments.color as BadgeColor} 
+                          hasBorder 
+                        />
+                      ) : (
+                        <span className="text-sm text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getCategoryColor(product.category)}`}>
-                        {product.category}
-                      </span>
+                      {product.categories ? (
+                        <Badge 
+                          label={product.categories.name} 
+                          color={product.categories.color as BadgeColor} 
+                        />
+                      ) : (
+                        <span className="text-sm text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{formatCurrency(product.cost_price)}</div>

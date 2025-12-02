@@ -6,12 +6,30 @@ export interface User {
   created_at: string
 }
 
+// Category type for dynamic category management
+export interface Category {
+  id: string
+  name: string
+  color: string
+  active: boolean
+  created_at: string
+}
+
+// Department type for dynamic department management
+export interface Department {
+  id: string
+  name: string
+  color: string
+  active: boolean
+  created_at: string
+}
+
 // Product type for the product library
 export interface Product {
   id: string
   name: string
-  category: string
-  department: string // Deli, Bakery, Cigarettes, Soft Drinks, or Other
+  category_id: string
+  department_id: string
   cost_price: number
   sell_price: number
   shelf_life?: number // in hours
@@ -20,6 +38,9 @@ export interface Product {
   active: boolean // soft delete flag
   created_at: string
   updated_at?: string
+  // Joined data from related tables (when fetching with join)
+  categories?: Category
+  departments?: Department
 }
 
 // Sales data type for tracking daily sales
@@ -101,14 +122,19 @@ export const WASTE_REASONS: WasteReason[] = [
   'Other',
 ]
 
-// Department types
-export type Department = 'Deli' | 'Bakery' | 'Cigarettes' | 'Soft Drinks' | 'Other'
+// Color options for categories and departments
+export type BadgeColor = 'blue' | 'red' | 'green' | 'amber' | 'orange' | 'cyan' | 'purple' | 'pink' | 'yellow' | 'gray'
 
-export const DEPARTMENTS: Department[] = [
-  'Deli',
-  'Bakery',
-  'Cigarettes',
-  'Soft Drinks',
-  'Other',
+export const BADGE_COLORS: { value: BadgeColor; label: string }[] = [
+  { value: 'blue', label: 'Blue' },
+  { value: 'red', label: 'Red' },
+  { value: 'green', label: 'Green' },
+  { value: 'amber', label: 'Amber' },
+  { value: 'orange', label: 'Orange' },
+  { value: 'cyan', label: 'Cyan' },
+  { value: 'purple', label: 'Purple' },
+  { value: 'pink', label: 'Pink' },
+  { value: 'yellow', label: 'Yellow' },
+  { value: 'gray', label: 'Gray' },
 ]
 
